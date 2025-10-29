@@ -148,9 +148,15 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
         return None, 0
     
     def _match_root(self, text: str) -> tuple[Optional[str], int]:
-        """Match root consonant (longest first)"""
+        """Match root consonant (longest first, preserving case for Sanskrit)"""
+        # First try case-sensitive match for Sanskrit retroflexes
         for root in sorted(self.alphabet.CONSONANTS.keys(), key=len, reverse=True):
-            if text.lower().startswith(root):
+            if text.startswith(root):
+                return root, len(root)
+        
+        # Then try case-insensitive match for regular consonants
+        for root in sorted(self.alphabet.CONSONANTS.keys(), key=len, reverse=True):
+            if text.lower().startswith(root.lower()):
                 return root.lower(), len(root)
         return None, 0
     
@@ -186,7 +192,11 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
         return None, 0
     
     def _match_postscript(self, text: str) -> tuple[Optional[str], int]:
-        """Match postscript consonant"""
+        """Match postscript consonant (capitals signal new syllable, not postscripts)"""
+        # Don't match if starting with capital (Sanskrit consonant starts new syllable)
+        if text and text[0].isupper():
+            return None, 0
+        
         for post in sorted(self.rules.POSTSCRIPTS, key=len, reverse=True):
             if text.lower().startswith(post):
                 return post, len(post)

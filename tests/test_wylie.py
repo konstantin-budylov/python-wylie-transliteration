@@ -432,18 +432,30 @@ class TestWylieTransliterator(unittest.TestCase):
                 self.assertEqual(result, expected)
     
     def test_sanskrit_in_context(self):
-        """Test Sanskrit marks in context"""
-        # oM maNi padme hUM
+        """Test Sanskrit marks and mantras"""
+        # Individual syllables from Om Mani Padme Hum mantra
         test_cases = [
-            ('oM', 'ཨོཾ'),
-            ('hUM', 'ཧཱུཾ'),
+            ('oM', 'ཨོཾ'),      # Standalone vowel + anusvara
+            ('ma', 'མ'),        # Basic syllable
+            ('Ni', 'ཎི'),       # Sanskrit retroflex ṇ
+            ('pa', 'པ'),        # Basic syllable
+            ('dme', 'དྨེ'),     # Subscript m
+            ('hUM', 'ཧཱུྃ'),    # Compound vowel + special anusvara
         ]
         
         for wylie, expected in test_cases:
             with self.subTest(wylie=wylie):
                 result = self.trans.transliterate(wylie)
-                # Just check the mark is present
-                self.assertIn('ཾ', result, f"Anusvara missing in {wylie}")
+                self.assertEqual(result, expected, 
+                                f"Failed: {wylie} → {result} (expected {expected})")
+    
+    def test_full_mantra(self):
+        """Test the complete Om Mani Padme Hum mantra"""
+        wylie = "oM ma Ni pa dme hUM|"
+        expected = "ཨོཾ་མ་ཎི་པ་དྨེ་ཧཱུྃ།"
+        result = self.trans.transliterate(wylie)
+        self.assertEqual(result, expected,
+                        f"\nInput:    {wylie}\nResult:   {result}\nExpected: {expected}")
     
     # === EDGE CASES ===
     

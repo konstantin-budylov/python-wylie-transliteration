@@ -47,6 +47,10 @@ service = TransliterationService()
 tibetan = service.transliterate_wylie_to_tibetan("bla ma")
 print(tibetan)  # བླ་མ
 
+# Sanskrit and mantras (with proper syllable breaks)
+mantra = service.transliterate_wylie_to_tibetan("oM ma Ni pa dme hUM|")
+print(mantra)  # ཨོཾ་མ་ཎི་པ་དྨེ་ཧཱུྃ།
+
 # Batch processing
 texts = ["sangs rgyas", "byang chub", "chos"]
 results = service.transliterate_batch(texts)
@@ -161,7 +165,7 @@ python tests/test_wylie.py
 | `dza sha`              | ཛ་ཤ     | Multi-char consonants |
 | `grwa drwa`            | གྲྭ་དྲྭ | Double subscripts     |
 | `1959`                 | ༡༩༥༩    | Tibetan numerals      |
-| `oM maNi pad me hUM\|` | ཨོཾ་མ་ཎི་པ་དྨེ་ཧཱུྃ། | Om Mani Pad Me Hum    |
+| `oM ma Ni pa dme hUM\|` | ཨོཾ་མ་ཎི་པ་དྨེ་ཧཱུྃ། | Om Mani Padme Hum (mantra) |
 
 ## Documentation
 

@@ -56,6 +56,13 @@ class TibetanAlphabet:
         'ddh': '\u0F4D',  # ཌྷ TIBETAN LETTER DDHA
         'nn': '\u0F4E',   # ཎ TIBETAN LETTER NNA
         'kss': '\u0F69',  # ཀྵ TIBETAN LETTER KSSA
+        # Sanskrit retroflex capitals (for direct access in syllables)
+        'Ta': '\u0F4A',   # ཊ TIBETAN LETTER TTA
+        'Tha': '\u0F4B',  # ཋ TIBETAN LETTER TTHA
+        'Da': '\u0F4C',   # ཌ TIBETAN LETTER DDA
+        'Dha': '\u0F4D',  # ཌྷ TIBETAN LETTER DDHA
+        'Na': '\u0F4E',   # ཎ TIBETAN LETTER NNA
+        'Sha': '\u0F65',  # ཥ TIBETAN LETTER SSA
     }
     
     # Vowel signs
@@ -66,6 +73,7 @@ class TibetanAlphabet:
         'e': '\u0F7A',    # ེ TIBETAN VOWEL SIGN E
         'o': '\u0F7C',    # ོ TIBETAN VOWEL SIGN O
         'A': '\u0F71',    # ཱ TIBETAN VOWEL SIGN AA (long a)
+        'U': '\u0F71\u0F74',  # ཱུ Compound: long a + u (for mantras like hUM)
         '-i': '\u0F80',   # ྀ TIBETAN VOWEL SIGN REVERSED I
         '-I': '\u0F81',   # ཱྀ TIBETAN VOWEL SIGN REVERSED II
     }
@@ -77,6 +85,7 @@ class TibetanAlphabet:
         'y': '\u0FB1',    # ྱ TIBETAN SUBJOINED LETTER YA
         'w': '\u0FAD',    # ྭ TIBETAN SUBJOINED LETTER WA
         'v': '\u0FAD',    # ྭ Same as w (alternative notation)
+        'm': '\u0FA8',    # ྨ TIBETAN SUBJOINED LETTER MA (for mantras)
     }
     
     # Subjoined forms (for use under superscripts)
@@ -152,11 +161,14 @@ class TibetanAlphabet:
     
     # Sanskrit marks
     SANSKRIT_MARKS: Dict[str, str] = {
-        'M': '\u0F7E',    # ཾ TIBETAN SIGN RJES SU NGA RO (anusvara)
+        'M': '\u0F7E',    # ཾ TIBETAN SIGN RJES SU NGA RO (anusvara) - default
         'H': '\u0F7F',    # ཿ TIBETAN SIGN RNAM BCAD (visarga)
         '~M': '\u0F7E',   # Alternative notation
         '~H': '\u0F7F',   # Alternative notation
     }
+    
+    # Alternative anusvara for compound vowels (like hUM)
+    ANUSVARA_AFTER_U: str = '\u0F83'  # ྃ TIBETAN SIGN SNA LDAN (after U/long vowels)
     
     # Sanskrit retroflex capitals
     SANSKRIT_RETROFLEX: Dict[str, str] = {

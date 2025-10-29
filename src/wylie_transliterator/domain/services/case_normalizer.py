@@ -23,7 +23,7 @@ class CaseNormalizer:
     SANSKRIT_RETROFLEX_3 = ['Tha', 'Dha', 'Sha']
     SANSKRIT_RETROFLEX_2 = ['Ta', 'Da', 'Na']
     SANSKRIT_MARKS = ['M', 'H']
-    TERMINATOR_CHARS = [' ', '/', '|', '\n', '\t']
+    TERMINATOR_CHARS = [' ', '/', '|', '\n', '\t', 'M']  # M can follow sanskrit
     
     def __init__(self):
         self.alphabet = TibetanAlphabet()
@@ -54,9 +54,10 @@ class CaseNormalizer:
             if matched:
                 continue
             
-            # Check for 2-char retroflex
+            # Check for 2-char retroflex (preserve Sanskrit capitals)
             for retro in self.SANSKRIT_RETROFLEX_2:
                 if text[i:i+len(retro)] == retro:
+                    # Always preserve Sanskrit retroflex
                     result.append(retro)
                     i += len(retro)
                     matched = True
@@ -96,8 +97,22 @@ class CaseNormalizer:
                 continue
             
             # Single character
-            if text[i].isupper() and text[i].lower() in self.alphabet.CONSONANTS:
-                result.append(text[i].lower())
+            if text[i].isupper():
+                # Check if it's a potential Sanskrit capital (N, T, D, S)
+                if text[i] in ['N', 'T', 'D', 'S'] and i+1 < len(text):
+                    next_char = text[i+1]
+                    # If followed by vowel (not 'h' or 'a'), it's Sanskrit
+                    if next_char.islower() and next_char not in ['h', 'a']:
+                        # Convert "Ni" to "Nai" so parser sees "Na" + "i" vowel
+                        result.append(text[i] + 'a')
+                        i += 1
+                        continue
+                
+                # Otherwise normalize if it's a consonant
+                if text[i].lower() in self.alphabet.CONSONANTS:
+                    result.append(text[i].lower())
+                else:
+                    result.append(text[i])
             else:
                 result.append(text[i])
             i += 1
