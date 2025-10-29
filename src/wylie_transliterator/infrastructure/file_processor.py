@@ -27,14 +27,13 @@ class FileProcessor:
         Args:
             input_path: Path to input file
             output_path: Path to output file
-            mode: 't' (wylie→tibetan), 'w' (tibetan→wylie), or 'auto'
+            mode: 'w' (wylie→tibetan), 't' (tibetan→wylie), or 'auto'
             
         Returns:
             Statistics about the transliteration
             
         Raises:
             FileNotFoundError: If input file doesn't exist
-            NotImplementedError: If mode 'w' is requested
             ValueError: If mode is invalid
         """
         # Read input
@@ -46,15 +45,15 @@ class FileProcessor:
         
         # Validate mode
         if mode not in ['t', 'w']:
-            raise ValueError(f"Invalid mode: {mode}. Must be 't', 'w', or 'auto'")
+            raise ValueError(f"Invalid mode: {mode}. Must be 'w', 't', or 'auto'")
         
         # Transliterate
-        if mode == 't':
+        if mode == 'w':
+            # Wylie → Tibetan
             output_text = self.service.transliterate_wylie_to_tibetan(input_text)
-        elif mode == 'w':
-            raise NotImplementedError(
-                "Reverse transliteration (Tibetan → Wylie) is not yet implemented"
-            )
+        elif mode == 't':
+            # Tibetan → Wylie
+            output_text = self.service.transliterate_tibetan_to_wylie(input_text)
         
         # Write output
         self._write_file(output_path, output_text)
@@ -95,8 +94,8 @@ class FileProcessor:
         Auto-detect whether text is Wylie or Tibetan Unicode.
         
         Returns:
-            't' for Wylie input (transliterate to Tibetan)
-            'w' for Tibetan input (transliterate to Wylie)
+            'w' for Wylie input (transliterate to Tibetan)
+            't' for Tibetan input (transliterate to Wylie)
         """
         # Sample first 500 chars
         sample = text[:500]
@@ -106,8 +105,8 @@ class FileProcessor:
         
         # If more than 30% is Tibetan Unicode, it's Tibetan
         if len(sample) > 0 and tibetan_chars / len(sample) > 0.3:
-            return 'w'  # Tibetan to Wylie
+            return 't'  # Tibetan to Wylie
         
         # Otherwise assume Wylie input
-        return 't'  # Wylie to Tibetan
+        return 'w'  # Wylie to Tibetan
 
