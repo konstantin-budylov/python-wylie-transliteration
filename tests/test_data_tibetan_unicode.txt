@@ -1,0 +1,129 @@
+# Tibetan Unicode Test Data
+# Format: Wylie | Tibetan Unicode | Description
+
+# === BASIC CONSONANTS ===
+ka|ཀ|Basic consonant ka
+kha|ཁ|Aspirated kha
+ga|ག|Voiced ga
+nga|ང|Nasal nga
+ca|ཅ|Palatal ca
+cha|ཆ|Aspirated cha
+ja|ཇ|Voiced ja
+nya|ཉ|Palatal nasal nya
+ta|ཏ|Dental ta
+tha|ཐ|Aspirated tha
+da|ད|Voiced da
+na|ན|Dental nasal na
+pa|པ|Labial pa
+pha|ཕ|Aspirated pha
+ba|བ|Voiced ba
+ma|མ|Labial nasal ma
+tsa|ཙ|Affricate tsa
+tsha|ཚ|Aspirated tsha
+dza|ཛ|Voiced dza
+wa|ཝ|Semivowel wa
+zha|ཞ|Fricative zha
+za|ཟ|Voiced za
+'a|འ|A-chung/glottal stop
+ya|ཡ|Semivowel ya
+ra|ར|Liquid ra
+la|ལ|Liquid la
+sha|ཤ|Sibilant sha
+sa|ས|Sibilant sa
+ha|ཧ|Aspirate ha
+a|ཨ|Pure vowel a
+
+# === VOWELS ===
+ki|ཀི|Consonant + i vowel
+ku|ཀུ|Consonant + u vowel
+ke|ཀེ|Consonant + e vowel
+ko|ཀོ|Consonant + o vowel
+kA|ཀཱ|Consonant + long a
+
+# === SUBSCRIPTS (STACKS) ===
+kra|ཀྲ|K + subscript ra
+kla|ཀླ|K + subscript la
+kya|ཀྱ|K + subscript ya
+kwa|ཀྭ|K + subscript wa
+gra|གྲ|G + subscript ra
+grwa|གྲྭ|G + subscript ra + wa
+bra|བྲ|B + subscript ra
+bla|བླ|B + subscript la
+mya|མྱ|M + subscript ya
+phra|ཕྲ|Ph + subscript ra
+
+# === SUPERSCRIPTS ===
+rka|རྐ|Superscript ra + ka
+rga|རྒ|Superscript ra + ga
+rnga|རྔ|Superscript ra + nga
+lka|ལྐ|Superscript la + ka
+lga|ལྒ|Superscript la + ga
+ska|སྐ|Superscript sa + ka
+sga|སྒ|Superscript sa + ga
+
+# === PRESCRIPTS ===
+dka|དཀ|Prescript da + ka
+dga|དགའ|Prescript da + ga + 'a
+bka|བཀ|Prescript ba + ka
+bga|བག|Prescript ba + ga
+mda|མད|Prescript ma + da
+mna|མན|Prescript ma + na
+
+# === POSTSCRIPTS ===
+kag|ཀག|Ka + postscript ga
+kang|ཀང|Ka + postscript nga
+kad|ཀད|Ka + postscript da
+kan|ཀན|Ka + postscript na
+kab|ཀབ|Ka + postscript ba
+kam|ཀམ|Ka + postscript ma
+kar|ཀར|Ka + postscript ra
+kal|ཀལ|Ka + postscript la
+kas|ཀས|Ka + postscript sa
+
+# === DOUBLE POSTSCRIPTS ===
+kags|ཀགས|Ka + ga + sa (double postscript)
+kangs|ཀངས|Ka + nga + sa
+kabs|ཀབས|Ka + ba + sa
+kams|ཀམས|Ka + ma + sa
+karbs|ཀརབས|Ka + ra + ba + sa (complex)
+
+# === COMPLEX STACKS ===
+bsgrubs|བསྒྲུབས|b + s + g + r + u + b + s (7 components)
+skra|སྐྲ|s + k + r + a (superscript + subscript)
+bskyed|བསྐྱེད|b + s + k + y + e + d
+spyod|སྤྱོད|s + p + y + o + d
+rgyal|རྒྱལ|r + g + y + a + l
+dbyar|དབྱར|d + b + y + a + r
+
+# === SPECIAL CHARACTERS ===
+'i|འི|A-chung + i vowel
+'o|འོ|A-chung + o vowel
+'u|འུ|A-chung + u vowel
+
+# === WORDS FROM THL EXAMPLES ===
+dbu|དབུ|Head/top (common word)
+phywa|ཕྱྭ|Fortune (complex stack)
+grwa|གྲྭ|Monastery corner
+drwa|དྲྭ|Net (similar to grwa)
+skya|སྐྱ|Grey
+sgya|སྒྱ|Happy
+spya|སྤྱ|Spy (loan word)
+smya|སྨྱ|Smile
+
+# === NUMERALS (Tibetan) ===
+0|༠|Zero
+1|༡|One
+2|༢|Two
+3|༣|Three
+4|༤|Four
+5|༥|Five
+6|༦|Six
+7|༧|Seven
+8|༨|Eight
+9|༩|Nine
+
+# === PUNCTUATION ===
+ |་|Tsheg (syllable separator)
+shad|།|Shad (phrase delimiter)
+nyis shad|༎|Double shad (section delimiter)
+
