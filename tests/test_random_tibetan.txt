@@ -1,0 +1,67 @@
+# Random Tibetan Text Samples for Testing
+# These are real Tibetan syllables and common patterns
+
+# Common Tibetan words and phrases
+དབུ་མ|dbu ma|Middle, center (Madhyamaka philosophy)
+བསྒྲུབས|bsgrubs|Accomplished, achieved
+རྒྱལ་བ|rgyal ba|Victor, Buddha
+བླ་མ|bla ma|Guru, spiritual teacher
+སངས་རྒྱས|sangs rgyas|Buddha (lit. awakened-expanded)
+བྱང་ཆུབ|byang chub|Enlightenment, bodhi
+སེམས་ཅན|sems can|Sentient being
+ཆོས|chos|Dharma, teaching, phenomenon
+སྐྱེ་བ|skye ba|Birth, arising
+འཆི་བ|'chi ba|Death, dying
+སྡུག་བསྔལ|sdug bsngal|Suffering, dukkha
+བདེ་བ|bde ba|Happiness, bliss
+ཀུན་བཟང|kun bzang|Samantabhadra (All-Good)
+སྤྱན་རས་གཟིགས|spyan ras gzigs|Avalokiteshvara (Chenrezig)
+
+# Complex stacks from THL examples
+རྐ་རྒ་རྔ་རྗ་རྙ་རྟ་རྡ་རན་རབ་རམ་རྩ་རྫ|rka rga rnga rja rnya rta rda rna rba rma rtsa rdza|Superscript r combinations
+ལྐ་ལྒ་ལྔ་ལཅ་ལཇ་ལྟ་ལྡ་ལཔ་ལབ་ལྷ|lka lga lnga lca lja lta lda lpa lba lha|Superscript l combinations
+སྐ་སྒ་སྔ་སྙ་སྟ་སྡ་སན་སྤ་སྦ་སྨ་སྩ|ska sga snga snya sta sda sna spa sba sma stsa|Superscript s combinations
+ཀྭ་ཁྭ་གྭ་ཅྭ་ཉྭ་ཏྭ་དྭ་ཙྭ་ཚྭ་ཞྭ་ཟྭ་རྭ་ཤྭ་སྭ་ཧྭ|kwa khwa gwa cwa nywa twa dwa tswa tshwa zhwa zwa rwa shwa swa hwa|Subscript w combinations
+ཀྱ་ཁྱ་གྱ་པྱ་ཕྱ་བྱ་མྱ|kya khya gya pya phya bya mya|Subscript y combinations
+ཀྲ་ཁྲ་གྲ་ཏྲ་ཐྲ་དྲ་པྲ་ཕྲ་བྲ་མྲ་ཤྲ་སྲ་ཧྲ|kra khra gra tra thra dra pra phra bra mra shra sra hra|Subscript r combinations
+ཀླ་གླ་བླ་ཟླ་རླ་སླ|kla gla bla zla rla sla|Subscript l combinations
+
+# Multiple component stacks
+རྐྱ་རྒྱ་རྨྱ་རྒྭ་རྩྭ|rkya rgya rmya rgwa rtswa|Superscript r + subscript
+སྐྱ་སྒྱ་སྤྱ་སྦྱ་སྨྱ|skya sgya spya sbya smya|Superscript s + subscript
+སྐྲ་སྒྲ་སྣྲ་སྤྲ་སྦྲ་སྨྲ|skra sgra snra spra sbra smra|Superscript s + subscript r
+གྲྭ་དྲྭ་ཕྱྭ|grwa drwa phywa|Double subscripts
+
+# Postscript combinations
+གང་དང་ཐང་གནས་ལས་རྣམས|gang dang thang gnas las rnams|Common postscript patterns
+བསྟན་པ|bstan pa|Teaching (s + t + a + n + p + a)
+གསུངས|gsungs|Speech, said (g + s + u + ng + s)
+བརྟེན|brten|Depend on (b + r + t + e + n)
+མཁའ|mkha'|Sky (m + kh + a + ')
+
+# Numbers and dates
+༡༩༥༩|1959|Year 1959
+༢༠༢༤|2024|Year 2024
+
+# Common phrases with punctuation
+ཐུགས་རྗེ་ཆེ།|thugs rje che|Thank you
+བཀྲ་ཤིས་བདེ་ལེགས།|bkra shis bde legs|Tashi delek (greeting)
+རྒྱལ་བ་རིན་པོ་ཆེ།|rgyal ba rin po che|Precious Victor (Dalai Lama title)
+
+# Mantra syllables (often have unusual stacks)
+ཨོཾ་མ་ཎི་པདྨེ་ཧཱུྃ།|oM ma Ni pad+me hU~M|Om Mani Padme Hum
+ༀ་ཨཱཿཧཱུྃ།|oM AH hU~M|Om Ah Hum (seed syllables)
+
+# Random valid syllables for edge case testing
+འགྲོ|'gro|Go, travel
+འཇིགས|'jigs|Fear
+བསྲེགས|bsregs|Burned
+བརྩེགས|brtsegs|Piled up
+གཞུང|gzhung|Text, treatise
+སྔོན|sngon|Before, previous
+མཁན|mkhan|Master, expert
+འབྲུ|'bru|Grain, seed
+སྨྲ|smra|Speak, say
+སྤྲུལ|sprul|Emanation, tulku
+ཕྱག|phyag|Hand, respect (honorific)
+
