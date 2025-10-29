@@ -4,6 +4,7 @@ Provides high-level use cases for transliteration operations.
 """
 
 from ..domain.services.transliterator import WylieToTibetanTransliterator
+from ..domain.services.tibetan_to_wylie import TibetanToWylieTransliterator
 
 
 class TransliterationService:
@@ -12,10 +13,15 @@ class TransliterationService:
     
     This is the main entry point for application-level operations.
     Domain services are hidden behind this application service.
+    
+    Supports bidirectional transliteration:
+    - Wylie → Tibetan Unicode
+    - Tibetan Unicode → Wylie
     """
     
     def __init__(self):
-        self._transliterator = WylieToTibetanTransliterator()
+        self._wylie_to_tibetan = WylieToTibetanTransliterator()
+        self._tibetan_to_wylie = TibetanToWylieTransliterator()
     
     def transliterate_wylie_to_tibetan(
         self,
@@ -38,7 +44,7 @@ class TransliterationService:
             'བླ་མ'
         """
         spaces_as_tsheg = not preserve_spaces
-        return self._transliterator.transliterate(wylie_text, spaces_as_tsheg)
+        return self._wylie_to_tibetan.transliterate(wylie_text, spaces_as_tsheg)
     
     def transliterate_batch(
         self,
@@ -59,6 +65,40 @@ class TransliterationService:
             self.transliterate_wylie_to_tibetan(text, preserve_spaces)
             for text in wylie_texts
         ]
+    
+    def transliterate_tibetan_to_wylie(self, tibetan_text: str) -> str:
+        """
+        Use Case: Transliterate Tibetan Unicode to Wylie.
+        
+        Args:
+            tibetan_text: Input text in Tibetan Unicode
+            
+        Returns:
+            Wylie transliteration string
+            
+        Example:
+            >>> service = TransliterationService()
+            >>> service.transliterate_tibetan_to_wylie('བླ་མ')
+            'bla ma'
+        """
+        return self._tibetan_to_wylie.transliterate(tibetan_text)
+    
+    def transliterate_tibetan_to_wylie_batch(self, tibetan_texts: list[str]) -> list[str]:
+        """
+        Use Case: Transliterate multiple Tibetan texts to Wylie.
+        
+        Args:
+            tibetan_texts: List of Tibetan Unicode texts
+            
+        Returns:
+            List of Wylie transliteration strings
+            
+        Example:
+            >>> service = TransliterationService()
+            >>> service.transliterate_tibetan_to_wylie_batch(['བླ་མ', 'སངས་རྒྱས'])
+            ['bla ma', 'sangs rgyas']
+        """
+        return [self.transliterate_tibetan_to_wylie(text) for text in tibetan_texts]
 
 
 class TransliterationStatistics:
