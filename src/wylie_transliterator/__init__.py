@@ -10,7 +10,7 @@ from .application.acip_service import ACIPService
 from .domain.models.syllable import Syllable, SyllableComponents
 from .domain.services.transliterator import WylieToTibetanTransliterator
 
-__version__ = "2.1.0"
+__version__ = "0.0.4"
 __all__ = [
     "TransliterationService",
     "ACIPService",

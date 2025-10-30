@@ -11,9 +11,9 @@ long_description = readme_file.read_text(encoding='utf-8') if readme_file.exists
 
 setup(
     name="wylie-transliterator",
-    version="2.0.0",
+    version="0.0.4",
     author="Python DDD Refactoring",
-    description="Extended Wylie Transliteration for Tibetan Unicode (Domain-Driven Design)",
+    description="Extended Wylie Transliteration for Tibetan Unicode with ACIP support (Domain-Driven Design)",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/wylie-transliterator",
