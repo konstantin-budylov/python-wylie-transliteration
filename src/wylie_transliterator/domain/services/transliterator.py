@@ -114,16 +114,13 @@ class WylieToTibetanTransliterator:
         return '', 0
     
     def _match_sanskrit_mark(self, text: str, previous_char: str = '') -> Tuple[str, int]:
-        """Match Sanskrit marks (context-aware for anusvara)"""
+        """Match Sanskrit marks"""
+        # Note: Always use U+0F7E for M (anusvara) regardless of context
+        # This matches pyewts behavior
         for mark_len in [2, 1]:
             if len(text) >= mark_len:
                 mark = text[:mark_len]
                 if mark in self.alphabet.SANSKRIT_MARKS:
-                    # Use special anusvara after U/compound vowels (contains u)
-                    if mark == 'M' and previous_char:
-                        # Check if previous contains 'u' or 'U' vowel
-                        if '\u0F74' in previous_char or '\u0F71\u0F74' in previous_char:
-                            return self.alphabet.ANUSVARA_AFTER_U, mark_len
                     return self.alphabet.SANSKRIT_MARKS[mark], mark_len
         return '', 0
     
@@ -156,21 +153,52 @@ class WylieToTibetanTransliterator:
         if not components or not components.root:
             return '', 0
         
+        # Detect vowel-initial syllable (root='a' but text doesn't start with 'a')
+        is_vowel_initial = (components.root == 'a' and 
+                           text and text[0] != 'a' and text[0] != 'A' and
+                           components.vowel and components.vowel != 'a')
+        
         # Calculate matched length
         matched_len = 0
         if components.prescript:
             matched_len += len(components.prescript)
         if components.superscript:
             matched_len += len(components.superscript)
-        matched_len += len(components.root)
+        
+        # Don't count implicit 'a' root for vowel-initial syllables
+        if not is_vowel_initial:
+            matched_len += len(components.root)
+            
         if components.subscript:
-            # Handle double subscripts
-            if '+' in components.subscript:
-                matched_len += sum(len(s) for s in components.subscript.split('+'))
+            # Handle subscripts (including explicit + notation for Sanskrit)
+            # Check if there's an explicit + in the original text
+            pos_after_root = (len(components.prescript or '') + 
+                             len(components.superscript or '') + 
+                             len(components.root))
+            if pos_after_root < len(text) and text[pos_after_root] == '+':
+                # Explicit + notation (e.g., n+D)
+                matched_len += 1  # Count the +
+                if '+' in components.subscript:
+                    # Multiple subscripts with + (e.g., +r+w)
+                    parts = components.subscript.split('+')
+                    matched_len += sum(len(s) for s in parts) + (len(parts) - 1)  # letters + internal +
+                else:
+                    matched_len += len(components.subscript)
             else:
-                matched_len += len(components.subscript)
+                # Implicit subscript (e.g., bla)
+                if '+' in components.subscript:
+                    matched_len += sum(len(s) for s in components.subscript.split('+'))
+                else:
+                    matched_len += len(components.subscript)
+        # Count vowel in matched length ONLY if explicitly present in input
+        # Check if the vowel string is actually at the expected position in text
         if components.vowel:
-            matched_len += len(components.vowel)
+            expected_vowel_pos = matched_len
+            if (expected_vowel_pos + len(components.vowel) <= len(text) and 
+                text[expected_vowel_pos:expected_vowel_pos + len(components.vowel)] == components.vowel):
+                # Vowel is explicitly present in input, count it
+                matched_len += len(components.vowel)
+            # else: vowel is inherent (e.g., 'a' in 'ka'), don't count it
         if components.postscript1:
             matched_len += len(components.postscript1)
         if components.postscript2:
