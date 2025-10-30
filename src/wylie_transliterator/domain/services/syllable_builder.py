@@ -43,15 +43,23 @@ class SyllableBuilder:
         else:
             unicode_parts.append(self.alphabet.CONSONANTS.get(components.root, ''))
         
-        # 4. Subscript (handle double subscripts like 'r+w')
+        # 4. Subscript (handle double subscripts like 'r+w' and Sanskrit stacks like 'n+D')
         if components.subscript:
             if '+' in components.subscript:
-                # Double subscript
+                # Double subscript or Sanskrit stack
                 subs = components.subscript.split('+')
                 for sub in subs:
-                    unicode_parts.append(self.alphabet.SUBSCRIPTS.get(sub, ''))
+                    # Try SUBSCRIPTS first (r, l, y, w), then SUBJOINED (all consonants)
+                    unicode_char = self.alphabet.SUBSCRIPTS.get(sub)
+                    if not unicode_char:
+                        unicode_char = self.alphabet.SUBJOINED.get(sub, '')
+                    unicode_parts.append(unicode_char)
             else:
-                unicode_parts.append(self.alphabet.SUBSCRIPTS.get(components.subscript, ''))
+                # Try SUBSCRIPTS first, then SUBJOINED
+                unicode_char = self.alphabet.SUBSCRIPTS.get(components.subscript)
+                if not unicode_char:
+                    unicode_char = self.alphabet.SUBJOINED.get(components.subscript, '')
+                unicode_parts.append(unicode_char)
         
         # 5. Vowel (skip inherent 'a')
         if components.vowel and components.vowel != 'a':

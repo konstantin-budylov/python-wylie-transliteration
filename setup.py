@@ -42,6 +42,11 @@ setup(
             "mypy>=1.0",
             "pylint>=2.17",
         ],
+        "test": [
+            "pytest>=7.0",
+            # Note: pyewts is installed locally from ../pyewts directory
+            # Install with: pip install -e ../pyewts
+        ],
     },
     entry_points={
         "console_scripts": [

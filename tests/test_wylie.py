@@ -408,7 +408,7 @@ class TestWylieTransliterator(unittest.TestCase):
         test_cases = [
             ('/', '།'),    # shad
             ('//', '༎'),  # double shad
-            ('|', '།'),    # alternative notation
+            ('|', '༑'),    # vertical shad (U+0F11)
             ('||', '༎'),  # alternative notation
         ]
         
@@ -439,8 +439,9 @@ class TestWylieTransliterator(unittest.TestCase):
             ('ma', 'མ'),        # Basic syllable
             ('Ni', 'ཎི'),       # Sanskrit retroflex ṇ
             ('pa', 'པ'),        # Basic syllable
-            ('dme', 'དྨེ'),     # Subscript m
-            ('hUM', 'ཧཱུྃ'),    # Compound vowel + special anusvara
+            ('dme', 'དམེ'),     # Two syllables (d + me), use d+me for subscript
+            ('d+me', 'དྨེ'),    # Subscript m (explicit +)
+            ('hUM', 'ཧཱུཾ'),    # Compound vowel + anusvara (U+0F7E)
         ]
         
         for wylie, expected in test_cases:
@@ -451,8 +452,9 @@ class TestWylieTransliterator(unittest.TestCase):
     
     def test_full_mantra(self):
         """Test the complete Om Mani Padme Hum mantra"""
+        # Note: 'dme' = དམེ (two syllables), use 'd+me' for subscript m
         wylie = "oM ma Ni pa dme hUM|"
-        expected = "ཨོཾ་མ་ཎི་པ་དྨེ་ཧཱུྃ།"
+        expected = "ཨོཾ་མ་ཎི་པ་དམེ་ཧཱུཾ༑"  # Matches pyewts behavior
         result = self.trans.transliterate(wylie)
         self.assertEqual(result, expected,
                         f"\nInput:    {wylie}\nResult:   {result}\nExpected: {expected}")

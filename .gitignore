@@ -1,4 +1,2 @@
 .idea
-_build
-blib
-__py_cache__
+/src/wylie_transliterator.egg-info

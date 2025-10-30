@@ -45,24 +45,24 @@ class TibetanAlphabet:
         'r': '\u0F62',    # ར TIBETAN LETTER RA
         'l': '\u0F63',    # ལ TIBETAN LETTER LA
         'sh': '\u0F64',   # ཤ TIBETAN LETTER SHA
-        'ss': '\u0F65',   # ཥ TIBETAN LETTER SSA (Sanskrit)
         's': '\u0F66',    # ས TIBETAN LETTER SA
+        # Note: 'ss' removed - should be two syllables (s + sa)
         'h': '\u0F67',    # ཧ TIBETAN LETTER HA
         'a': '\u0F68',    # ཨ TIBETAN LETTER A
-        # Sanskrit-specific (retroflex)
-        'tt': '\u0F4A',   # ཊ TIBETAN LETTER TTA
-        'tth': '\u0F4B',  # ཋ TIBETAN LETTER TTHA
-        'dd': '\u0F4C',   # ཌ TIBETAN LETTER DDA
-        'ddh': '\u0F4D',  # ཌྷ TIBETAN LETTER DDHA
-        'nn': '\u0F4E',   # ཎ TIBETAN LETTER NNA
-        'kss': '\u0F69',  # ཀྵ TIBETAN LETTER KSSA
-        # Sanskrit retroflex capitals (for direct access in syllables)
+        # Sanskrit retroflex capitals (Capital letters = single Sanskrit characters)
+        # Note: Lowercase doubles (tt, dd, etc.) are parsed as TWO separate syllables!
+        # Two-letter capital notation
         'Ta': '\u0F4A',   # ཊ TIBETAN LETTER TTA
         'Tha': '\u0F4B',  # ཋ TIBETAN LETTER TTHA
         'Da': '\u0F4C',   # ཌ TIBETAN LETTER DDA
         'Dha': '\u0F4D',  # ཌྷ TIBETAN LETTER DDHA
         'Na': '\u0F4E',   # ཎ TIBETAN LETTER NNA
         'Sha': '\u0F65',  # ཥ TIBETAN LETTER SSA
+        # Single-letter notation (capital letter alone)
+        'T': '\u0F4A',    # ཊ TIBETAN LETTER TTA
+        'D': '\u0F4C',    # ཌ TIBETAN LETTER DDA
+        'N': '\u0F4E',    # ཎ TIBETAN LETTER NNA
+        'S': '\u0F65',    # ཥ TIBETAN LETTER SSA
     }
     
     # Vowel signs
@@ -72,20 +72,26 @@ class TibetanAlphabet:
         'u': '\u0F74',    # ུ TIBETAN VOWEL SIGN U
         'e': '\u0F7A',    # ེ TIBETAN VOWEL SIGN E
         'o': '\u0F7C',    # ོ TIBETAN VOWEL SIGN O
+        'ai': '\u0F7B',   # ཻ TIBETAN VOWEL SIGN EE (diphthong ai)
+        'au': '\u0F7D',   # ཽ TIBETAN VOWEL SIGN OO (diphthong au)
+        # Long vowels (Sanskrit)
         'A': '\u0F71',    # ཱ TIBETAN VOWEL SIGN AA (long a)
-        'U': '\u0F71\u0F74',  # ཱུ Compound: long a + u (for mantras like hUM)
-        '-i': '\u0F80',   # ྀ TIBETAN VOWEL SIGN REVERSED I
-        '-I': '\u0F81',   # ཱྀ TIBETAN VOWEL SIGN REVERSED II
+        'I': '\u0F71\u0F72',  # ཱི Compound: long a + i (ā + i = ī)
+        'U': '\u0F71\u0F74',  # ཱུ Compound: long a + u (ā + u = ū)
+        # Reverse vowels (Sanskrit)
+        '-i': '\u0F80',   # ྀ TIBETAN VOWEL SIGN REVERSED I (ṛ)
+        '-I': '\u0F71\u0F80',  # ཱྀ Compound: long a + reversed i (ṝ)
     }
     
     # Subscript consonants (for stacks)
+    # Note: 'm' is NOT included here because it's only used with explicit +
+    # (e.g., d+me → དྨེ, not dme which should be two syllables: དམེ)
     SUBSCRIPTS: Dict[str, str] = {
         'r': '\u0FB2',    # ྲ TIBETAN SUBJOINED LETTER RA
         'l': '\u0FB3',    # ླ TIBETAN SUBJOINED LETTER LA
         'y': '\u0FB1',    # ྱ TIBETAN SUBJOINED LETTER YA
         'w': '\u0FAD',    # ྭ TIBETAN SUBJOINED LETTER WA
         'v': '\u0FAD',    # ྭ Same as w (alternative notation)
-        'm': '\u0FA8',    # ྨ TIBETAN SUBJOINED LETTER MA (for mantras)
     }
     
     # Subjoined forms (for use under superscripts)
@@ -129,6 +135,16 @@ class TibetanAlphabet:
         'ddh': '\u0F9D',  # ྜྷ TIBETAN SUBJOINED LETTER DDHA
         'nn': '\u0F9E',   # ྞ TIBETAN SUBJOINED LETTER NNA
         'kss': '\u0FB9',  # ྐྵ TIBETAN SUBJOINED LETTER KSSA
+        # Sanskrit retroflex capitals (single-letter notation)
+        'T': '\u0F9A',    # ྚ TIBETAN SUBJOINED LETTER TTA
+        'D': '\u0F9C',    # ྜ TIBETAN SUBJOINED LETTER DDA
+        'N': '\u0F9E',    # ྞ TIBETAN SUBJOINED LETTER NNA
+        'S': '\u0FB5',    # ྵ TIBETAN SUBJOINED LETTER SSA
+        # Two-letter notation for subjoined
+        'Ta': '\u0F9A',   # ྚ TIBETAN SUBJOINED LETTER TTA
+        'Da': '\u0F9C',   # ྜ TIBETAN SUBJOINED LETTER DDA
+        'Na': '\u0F9E',   # ྞ TIBETAN SUBJOINED LETTER NNA
+        'Sha': '\u0FB5',  # ྵ TIBETAN SUBJOINED LETTER SSA
     }
     
     # Punctuation marks
@@ -138,7 +154,7 @@ class TibetanAlphabet:
         '/': '\u0F0D',    # ། TIBETAN MARK SHAD
         '//': '\u0F0E',   # ༎ TIBETAN MARK NYIS SHAD
         ';': '\u0F0F',    # ༏ TIBETAN MARK TSHEG SHAD
-        '|': '\u0F0D',    # ། TIBETAN MARK SHAD (alternative)
+        '|': '\u0F11',    # ༑ TIBETAN MARK RINCHEN SPUNGS SHAD (vertical bar)
         '||': '\u0F0E',   # ༎ TIBETAN MARK NYIS SHAD (alternative)
         '!': '\u0F08',    # ༈ TIBETAN MARK SBRUL SHAD
         ':': '\u0F0E',    # ༎ Can represent double shad
@@ -191,6 +207,14 @@ class SyllableRules:
     
     # Valid superscripts
     SUPERSCRIPTS = {'r', 'l', 's'}
+    
+    # Valid superscript + root combinations
+    # In Tibetan orthography, superscripts are highly restricted
+    VALID_SUPERSCRIPT_COMBINATIONS = {
+        'r': ['k', 'g', 'ng', 'j', 'ny', 't', 'd', 'n', 'b', 'm', 'ts', 'dz'],
+        'l': ['k', 'g', 'ng', 'c', 'j', 't', 'd', 'p', 'b', 'h'],  # h added for lha
+        's': ['k', 'g', 'ng', 'ny', 't', 'd', 'n', 'p', 'b', 'm', 'ts'],
+    }
     
     # Valid postscripts  
     POSTSCRIPTS = {'g', 'ng', 'd', 'n', 'b', 'm', 'r', 'l', 's', "'"}

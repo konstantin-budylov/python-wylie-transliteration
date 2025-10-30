@@ -269,19 +269,28 @@ class TibetanToWylieTransliterator:
         if superscript:
             result.append(superscript)
         
-        # Root + subscripts
-        root_part = root
-        for sub in subscripts:
-            root_part += sub
+        # Special case: vowel-initial syllable (root='a' with explicit vowel, no subscripts)
+        # In EWTS, ཨོམ should be 'om' not 'aom'
+        is_vowel_initial = (root == 'a' and has_explicit_vowel and not subscripts and not prescript and not superscript)
         
-        # Add inherent 'a' to root if no explicit vowel and root isn't already 'a'
-        if not has_explicit_vowel and root != 'a':
-            root_part += 'a'
-        
-        result.append(root_part)
-        
-        if vowel:
+        if is_vowel_initial:
+            # For vowel-initial syllables, skip the 'a' root entirely
+            # e.g., ཨོམ → 'om' (just the vowel, not 'a' + vowel)
             result.append(vowel)
+        else:
+            # Root + subscripts
+            root_part = root
+            for sub in subscripts:
+                root_part += sub
+            
+            # Add inherent 'a' to root if no explicit vowel and root isn't already 'a'
+            if not has_explicit_vowel and root != 'a':
+                root_part += 'a'
+            
+            result.append(root_part)
+            
+            if vowel:
+                result.append(vowel)
         
         result.extend(postscripts)
         result.extend(marks)

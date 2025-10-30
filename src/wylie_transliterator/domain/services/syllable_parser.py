@@ -82,21 +82,42 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
         
         # Match root (required)
         root, root_len = self._match_root(text[pos:])
+        vowel = None  # Will be set below
+        is_vowel_initial = False  # Track if this is a vowel-initial syllable
+        
         if not root:
-            return None, 0
-        pos += root_len
-        
-        # Match subscript (can be double)
-        subscript, sub_len = self._match_subscript(text[pos:])
-        if subscript:
-            pos += sub_len
-        
-        # Match vowel
-        vowel, vowel_len = self._match_vowel(text[pos:])
-        if vowel:
-            pos += vowel_len
+            # Check if syllable starts with a vowel (vowel-initial syllable)
+            vowel, vowel_len = self._match_vowel(text[pos:])
+            if vowel and vowel != 'a':
+                # Vowel-initial syllable: use 'a' as implicit root
+                root = 'a'
+                pos += vowel_len  # Advance past the vowel we just matched
+                is_vowel_initial = True
+            else:
+                return None, 0
         else:
-            vowel = 'a'  # Default inherent vowel
+            pos += root_len
+        
+        # Validate superscript + root combination
+        if superscript:
+            if not self._is_valid_superscript_combination(superscript, root):
+                # Invalid combination, reject this parse
+                return None, 0
+        
+        # Match subscript (can be double) - only for non-vowel-initial syllables
+        subscript = None
+        if not is_vowel_initial:
+            subscript, sub_len = self._match_subscript(text[pos:])
+            if subscript:
+                pos += sub_len
+        
+        # Match vowel (only if not already matched above for vowel-initial syllables)
+        if vowel is None:
+            vowel, vowel_len = self._match_vowel(text[pos:])
+            if vowel:
+                pos += vowel_len
+            else:
+                vowel = 'a'  # Default inherent vowel
         
         # Match postscript 1
         postscript1, post1_len = self._match_postscript(text[pos:])
@@ -161,10 +182,37 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
         return None, 0
     
     def _match_subscript(self, text: str) -> tuple[Optional[str], int]:
-        """Match subscript (can be double like 'r+w')"""
+        """
+        Match subscript (can be double like 'r+w')
+        Also handles explicit + notation for Sanskrit stacks (e.g., 'n+D')
+        """
         subscripts_matched = []
         pos = 0
         
+        # Check for explicit + notation (Sanskrit stacks)
+        if text.startswith('+'):
+            pos += 1  # Skip the +
+            # Match any consonant from SUBJOINED as subscript
+            for cons in sorted(self.alphabet.SUBJOINED.keys(), key=len, reverse=True):
+                if text[pos:].startswith(cons):  # Case-sensitive for Sanskrit
+                    subscripts_matched.append(cons)
+                    pos += len(cons)
+                    
+                    # Check for another + (double subscript)
+                    if pos < len(text) and text[pos] == '+':
+                        pos += 1
+                        for cons2 in sorted(self.alphabet.SUBJOINED.keys(), key=len, reverse=True):
+                            if text[pos:].startswith(cons2):
+                                subscripts_matched.append(cons2)
+                                pos += len(cons2)
+                                break
+                    break
+            
+            if subscripts_matched:
+                return '+'.join(subscripts_matched), pos
+            return None, 0
+        
+        # Standard implicit subscripts (r, l, y, w)
         for sub in sorted(self.alphabet.SUBSCRIPTS.keys(), key=len, reverse=True):
             if text[pos:].lower().startswith(sub):
                 subscripts_matched.append(sub)
@@ -191,6 +239,22 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
                 return vowel, len(vowel)
         return None, 0
     
+    def _is_valid_superscript_combination(self, superscript: str, root: str) -> bool:
+        """
+        Validate that the superscript + root combination is valid in Tibetan orthography.
+        
+        In Tibetan, superscripts can only appear with specific root consonants:
+        - r: can go with k, g, ng, j, ny, t, d, n, b, m, ts, dz
+        - l: can go with k, g, ng, c, j, t, d, p, b
+        - s: can go with k, g, ng, ny, t, d, n, p, b, m, ts
+        """
+        if not hasattr(self.rules, 'VALID_SUPERSCRIPT_COMBINATIONS'):
+            # If rules don't have validation, allow all (backward compatibility)
+            return True
+        
+        valid_roots = self.rules.VALID_SUPERSCRIPT_COMBINATIONS.get(superscript, [])
+        return root in valid_roots
+    
     def _match_postscript(self, text: str) -> tuple[Optional[str], int]:
         """Match postscript consonant (capitals signal new syllable, not postscripts)"""
         # Don't match if starting with capital (Sanskrit consonant starts new syllable)
@@ -199,6 +263,14 @@ class MultiStrategySyllableParser(SyllableParsingStrategy):
         
         for post in sorted(self.rules.POSTSCRIPTS, key=len, reverse=True):
             if text.lower().startswith(post):
+                # Special case: apostrophe followed by vowel starts new syllable
+                # e.g., "ba'i" should be "ba" + "'i", not "ba'" + "i"
+                if post == "'" and len(text) > 1:
+                    next_char = text[1]
+                    # Check if next char is a vowel (i, u, e, o, etc.)
+                    if next_char in ['i', 'u', 'e', 'o', 'a', 'A', 'I', 'U', 'E', 'O']:
+                        return None, 0  # Don't treat as postscript
+                
                 return post, len(post)
         return None, 0
     
